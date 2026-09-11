@@ -45,10 +45,10 @@ reflector(9,5,0xffffff,2,0,-7,-4);
 reflector(3,9,0x151a22,1,1,-3,6);
 reflector(5,7,0x242b34,1,-3,1,-6);
 const pmrem=new THREE.PMREMGenerator(renderer);
-const steelEnvironment=pmrem.fromScene(reflectionScene,.025,.1,40);
+const steelEnvironment=pmrem.fromScene(reflectionScene,.16,.1,40);
 pmrem.dispose();
 reflectionScene.traverse(object=>{if(object.isMesh){object.geometry.dispose();object.material.dispose();}});
-const polishedSteel=new THREE.MeshPhysicalMaterial({color:0xe5e9ed,metalness:1,roughness:.16,envMap:steelEnvironment.texture,envMapIntensity:1.15,clearcoat:.15,clearcoatRoughness:.12});
+const polishedSteel=new THREE.MeshPhysicalMaterial({color:0xe5e9ed,metalness:1,roughness:.38,envMap:steelEnvironment.texture,envMapIntensity:.7,clearcoat:0,clearcoatRoughness:.4});
 // A recessed dished end: its centre sits inside the can, above the rolled contact rim.
 const baseProfile=[];
 for(let i=0;i<=64;i++){const r=.60*i/64;baseProfile.push([r,bottom+.22-.255*(r/.60)**2]);}
