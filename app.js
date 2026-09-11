@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from './assets/OrbitControls.js';
-import {createPlasticBottle} from './plastic-bottle.js?v=6';
+import {createPlasticBottle} from './plastic-bottle.js?v=7';
 const host=document.querySelector('#viewer'), loading=document.querySelector('#loading');
 const translations={
  fr:{title:'CLIMTECHPRO · Vue produit à 360°',brandSub:'EXPLORER LE PRODUIT',tag:'Vue produit à 360°',eyebrow:'CLIMATISATION · AÉROSOL',headline:'Aérosol nettoyant\npour climatiseur',pack:'Emballage',packValue:'Capuchon blanc / étiquette intégrale',label:'Étiquette',labelValue:'Bleu et noir · 360°',hint:'Faites glisser pour tourner.\nZoomez avec la molette ou deux doigts.',view:'VUE 3D',front:'Face',back:'Dos',reset:'Réinitialiser',auto:'Rotation auto',pause:'Pause',frontView:'Vue de face',backView:'Vue de dos',orbit:'Vue à',footer:'Modèle d’après photo · Étiquette originale',explore:'FAITES GLISSER POUR EXPLORER',viewer:'Vue 3D interactive du produit : faites glisser pour tourner et défiler pour zoomer',minus:'Dézoomer',plus:'Zoomer',frontTitle:'Revenir à la vue de face',backTitle:'Afficher le dos',resetTitle:'Réinitialiser la vue et le zoom',loading:'Chargement du produit…',lost:'Affichage interrompu. Actualisez la page.',error:'Impossible de charger la vue 3D. Actualisez la page ou utilisez un navigateur compatible WebGL.'},
