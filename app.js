@@ -29,7 +29,10 @@ const can=new THREE.Group();scene.add(can);
 // Match the unwrapped cylinder surface to the actual cropped artwork pixels.
 const radius=.66,labelWidth=1463,labelHeight=970;
 const bodyHeight=2*Math.PI*radius*labelHeight/labelWidth,bodyY=-.45;
-const bottom=bodyY-bodyHeight/2,top=bodyY+bodyHeight/2;
+const labelBottom=bodyY-bodyHeight/2,top=bodyY+bodyHeight/2;
+// Extend the bare can below the full label so the rolled rim cannot cover its footer.
+// The artwork keeps its original aspect ratio and full pixel crop.
+const bottom=labelBottom-.13;
 const metal=new THREE.MeshStandardMaterial({color:0xcbd0d5,metalness:.8,roughness:.22});
 const white=new THREE.MeshPhysicalMaterial({color:0xf9fafc,metalness:.03,roughness:.28,clearcoat:.45,clearcoatRoughness:.25});
 function lathe(profile,material,y=0){const g=new THREE.LatheGeometry(profile.map(p=>new THREE.Vector2(...p)),160);const m=new THREE.Mesh(g,material);m.position.y=y;can.add(m);return m}
