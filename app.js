@@ -33,7 +33,27 @@ const bottom=bodyY-bodyHeight/2,top=bodyY+bodyHeight/2;
 const metal=new THREE.MeshStandardMaterial({color:0xcbd0d5,metalness:.8,roughness:.22});
 const white=new THREE.MeshPhysicalMaterial({color:0xf9fafc,metalness:.03,roughness:.28,clearcoat:.45,clearcoatRoughness:.25});
 function lathe(profile,material,y=0){const g=new THREE.LatheGeometry(profile.map(p=>new THREE.Vector2(...p)),160);const m=new THREE.Mesh(g,material);m.position.y=y;can.add(m);return m}
-lathe([[0,bottom-.055],[.54,bottom-.055],[.61,bottom-.045],[.655,bottom-.005],[.669,bottom+.025],[.669,bottom+.065],[.657,bottom+.095],[.657,top+.005],[.66,top+.035],[.657,top+.075],[.60,top+.145],[.49,top+.195],[0,top+.195]],metal);
+lathe([[.669,bottom+.025],[.669,bottom+.065],[.657,bottom+.095],[.657,top+.005],[.66,top+.035],[.657,top+.075],[.60,top+.145],[.49,top+.195],[0,top+.195]],metal);
+// Studio reflections belong only to the polished base, preserving the printed label.
+const reflectionScene=new THREE.Scene();
+reflectionScene.background=new THREE.Color(0x697582);
+const studioRoom=new THREE.Mesh(new THREE.BoxGeometry(18,18,18),new THREE.MeshBasicMaterial({color:0x8e969d,side:THREE.BackSide}));reflectionScene.add(studioRoom);
+function reflector(w,h,color,intensity,x,y,z){const panel=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:new THREE.Color(color).multiplyScalar(intensity),side:THREE.DoubleSide}));panel.position.set(x,y,z);panel.lookAt(0,0,0);reflectionScene.add(panel);}
+reflector(4,12,0xffffff,4,-5,-3,3);
+reflector(2,10,0xffffff,3,5,-2,1);
+reflector(9,5,0xffffff,2,0,-7,-4);
+reflector(3,9,0x151a22,1,1,-3,6);
+reflector(5,7,0x242b34,1,-3,1,-6);
+const pmrem=new THREE.PMREMGenerator(renderer);
+const steelEnvironment=pmrem.fromScene(reflectionScene,.025,.1,40);
+pmrem.dispose();
+reflectionScene.traverse(object=>{if(object.isMesh){object.geometry.dispose();object.material.dispose();}});
+const polishedSteel=new THREE.MeshPhysicalMaterial({color:0xe5e9ed,metalness:1,roughness:.16,envMap:steelEnvironment.texture,envMapIntensity:1.15,clearcoat:.15,clearcoatRoughness:.12});
+// A recessed dished end: its centre sits inside the can, above the rolled contact rim.
+const baseProfile=[];
+for(let i=0;i<=64;i++){const r=.60*i/64;baseProfile.push([r,bottom+.22-.255*(r/.60)**2]);}
+baseProfile.push([.609,bottom-.045],[.619,bottom-.054],[.630,bottom-.058],[.641,bottom-.054],[.650,bottom-.044],[.659,bottom-.026],[.665,bottom-.006],[.669,bottom+.025]);
+const recessedBase=lathe(baseProfile,polishedSteel);recessedBase.name='Recessed polished stainless steel base';
 lathe([[0,top+.08],[.654,top+.08],[.667,top+.095],[.667,top+.88],[.664,top+.915],[.645,top+.95],[.59,top+.974],[.42,top+.991],[0,top+.998]],white);
 function ring(y,r,t){const m=new THREE.Mesh(new THREE.TorusGeometry(r,t,12,160),metal);m.rotation.x=Math.PI/2;m.position.y=y;can.add(m)}ring(bottom+.02,.65,.017);ring(bottom+.085,.659,.01);ring(top+.035,.655,.015);
 const map=await new THREE.TextureLoader().loadAsync('./assets/label.jpg');map.colorSpace=THREE.SRGBColorSpace;map.anisotropy=renderer.capabilities.getMaxAnisotropy();
